@@ -19,6 +19,6 @@ export default function LogoutButton({ session }: { session: Session | null }) {
       Logout
     </button>
   ) : (
-    <span>You need to sign in</span>
+    <span className="text-xs text-gray-400">You need to sign in</span>
   );
 }
