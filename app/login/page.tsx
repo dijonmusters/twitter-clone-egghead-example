@@ -1,13 +1,35 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import LoginForm from "./login-form";
+"use client";
 
-export default async function Login() {
-  const supabase = createServerComponentClient<Database>({ cookies });
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import Image from "next/image";
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+export default function LoginForm() {
+  const supabase = createClientComponentClient<Database>();
 
-  return <LoginForm session={session} />;
+  const handleSignIn = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+  };
+
+  return (
+    <div className="flex-1 flex justify-center items-center">
+      <button
+        onClick={handleSignIn}
+        className="hover:bg-gray-800 p-8 rounded-xl"
+      >
+        <Image
+          className="mx-auto mb-3"
+          src="/github-mark-white.png"
+          width={100}
+          height={100}
+          alt="GitHub logo"
+        />
+        Sign in with GitHub
+      </button>
+    </div>
+  );
 }
